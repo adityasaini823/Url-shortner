@@ -2,12 +2,13 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import { db } from './db/index.js';
-import authRoutes from './routes/authRoutes.js';
+import authRoutes from './routes/auth.route.js';
+import { errorMiddleware } from './middlewares/errorMiddleware.js';
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use("api/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 
 app.get("/api/health", async (req, res) => {
     try{
@@ -18,6 +19,7 @@ app.get("/api/health", async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 });
+app.use(errorMiddleware);
 async function startServer() {
   try {
     await db.execute(`SELECT 1`);
@@ -31,5 +33,4 @@ async function startServer() {
     process.exit(1);
   }
 }
-
 startServer();

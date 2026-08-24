@@ -1,13 +1,13 @@
-import db from "../db/index.js";
-import usersTable from "../db/schema/users.js";
+import {db} from "../db/index.js";
+import {usersTable} from "../db/schema/users.js";
 import { eq } from "drizzle-orm";
 
 const findUserByEmail = async (email) => {
     return await db
         .select({
             id: usersTable.id,
-            firstName: usersTable.first_name,
-            lastName: usersTable.last_name,
+            firstName: usersTable.firstName,
+            lastName: usersTable.lastName,
             email: usersTable.email,
             password: usersTable.password,
         })
@@ -20,20 +20,22 @@ const createUser = async ({
     firstName,
     lastName,
     email,
-    password
+    password,
+    salt
 }) => {
     const result = await db
         .insert(usersTable)
         .values({
-            first_name: firstName,
-            last_name: lastName,
+            firstName,
+            lastName,
             email,
-            password
+            password,
+            salt
         })
         .returning({
             id: usersTable.id,
-            firstName: usersTable.first_name,
-            lastName: usersTable.last_name,
+            firstName: usersTable.firstName,
+            lastName: usersTable.lastName,
             email: usersTable.email
         });
 
