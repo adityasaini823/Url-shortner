@@ -1,7 +1,7 @@
 import * as authService from "../services/auth.service.js";
 import { ApiResponse } from "../utils/api-response.js";
 import { ErrorHandler } from "../utils/errorHandler.js";
-export const signup = async (req, res) => {
+export const signup = async (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
 
   if (!firstName || !lastName || !email || !password) {
@@ -24,7 +24,7 @@ export const signup = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {

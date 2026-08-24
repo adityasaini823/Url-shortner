@@ -21,7 +21,7 @@ export const signup = async ({
     const existingUser = await findUserByEmail(email);
 
     if (existingUser.length > 0) {
-        next(new ErrorHandler(400, "Email already exists"));
+        throw new ErrorHandler(400, "Email already exists");
     }
     const { hashedPassword, salt } = await hashPassword(password);
     // console.log("body data", firstName, lastName, email, hashedPassword, salt)
@@ -53,11 +53,11 @@ export const login = async ({
     const users = await findUserByEmail(email);
 
     if (users.length === 0) {
-       next(new ErrorHandler(400, "Incorrect Email or Password"));
+      throw new ErrorHandler(400, "Incorrect Email or Password");
     }
 
     const user = users[0];
-
+    console.log("user", user)
     const isPasswordValid = await comparePassword(
         password,
         user.password,
@@ -65,7 +65,7 @@ export const login = async ({
     );
 
     if (!isPasswordValid) {
-        next(new ErrorHandler(400, "Incorrect Email or Password"));
+        throw new ErrorHandler(400, "Incorrect Email or Password");
     }
 
     const token = generateToken(
