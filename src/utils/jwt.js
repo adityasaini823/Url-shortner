@@ -12,5 +12,5 @@ export const generateToken =  (userId, userEmail) => {
 }
 export const verifyToken = (token)=>{
     const decoded = jwt.verify(token,secret);
-    return decoded.userId;
+    return  {userId: decoded.userId, userEmail: decoded.userEmail};
 }

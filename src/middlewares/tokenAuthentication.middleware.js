@@ -10,8 +10,7 @@ export const tokenAuthentication = (req, res, next) => {
     if (!token) {
       throw new ErrorHandler(401, "no token provided");
     }
-    const userId = verifyToken(token);
-    req.userId = userId;
+    req.user = verifyToken(token);
     next();
   } catch (err) {
     console.log(err);
