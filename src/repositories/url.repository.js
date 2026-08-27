@@ -1,4 +1,4 @@
-import {db} from "../db/db.js";
+import {db} from "../db/index.js";
 import {urlTable} from "../db/schema/urls.js";
 
 export const createUrl = async ({userId,shortCode,targetURL})=>{
