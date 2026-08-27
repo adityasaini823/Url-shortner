@@ -16,13 +16,17 @@ export const getAllUrls= async(req,res,next)=>{
     const urls = await UrlService.getAllUrls(userId);
     return res.status(200).json(new ApiResponse(200,urls,"URLs fetched successfully") );
 }
-export const getUrlByShortCode = async ()=>{
+export const getUrlByShortCode = async (req,res,next)=>{
     const shortCode = req.params.shortcode;
+    if(!shortCode){
+        return next(new ErrorHandler(400,"Shortcode is required"));
+    }
     const url = await UrlService.getUrlByShortCode(shortCode);
     return res.status(200).json(new ApiResponse(200,url,"URL fetched successfully"));
 }
 
-export const deleteUrlById = async (id)=>{
+export const deleteUrlById = async (req,res,next)=>{
+    const id = req.params.id;
     const deletedUrl = await UrlService.deleteUrlById(id);
-    return res.status(204).json(new ApiResponse(204,deletedUrl,"URL deleted successfully"));;
+    return res.status(200).json(new ApiResponse(204,deletedUrl,"URL deleted successfully"));;
 }

@@ -12,12 +12,13 @@ export const createUrl = async ({userId,shortCode,targetURL})=>{
     return result;
 }
 export const getAllUrls =async (userId)=>{
-    const [urls] = await db.select().from(urlTable).where(eq(urlTable.userId,userId));
+    const urls = await db.select().from(urlTable).where(eq(urlTable.userId,userId));
+    console.log(urls);
     return urls;
 }
 
 export const getUrlByShortCode = async (shortCode)=>{
-    const [url] = await db.select().from(urlTable).where(eq(urlTable.shortCode,shortCode));
+    const [url] = await db.select({targetURL:urlTable.targetURL}).from(urlTable).where(eq(urlTable.shortCode,shortCode));
     return url;
 }
 
@@ -25,6 +26,6 @@ export const deleteUrlById = async (id)=>{
     const [deletedUrl] = await db.delete(urlTable)
     .where(eq(urlTable.id,id))
     .returning({id: urlTable.id});
-    
+
     return deletedUrl;
 }
