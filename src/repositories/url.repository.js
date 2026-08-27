@@ -1,6 +1,6 @@
 import {db} from "../db/index.js";
 import {urlTable} from "../db/schema/urls.js";
-import {eq} from "drizzle-orm";
+import {eq,and} from "drizzle-orm";
 export const createUrl = async ({userId,shortCode,targetURL})=>{
     const [result] = await db.insert(urlTable)
     .values({userId,shortCode,targetURL})
@@ -22,10 +22,18 @@ export const getUrlByShortCode = async (shortCode)=>{
     return url;
 }
 
-export const deleteUrlById = async (id)=>{
-    const [deletedUrl] = await db.delete(urlTable)
-    .where(eq(urlTable.id,id))
-    .returning({id: urlTable.id});
+export const deleteUrlById = async (id, userId) => {
+    const [deletedUrl] = await db
+        .delete(urlTable)
+        .where(
+            and(
+                eq(urlTable.id, id),
+                eq(urlTable.userId, userId)
+            )
+        )
+        .returning({
+            id: urlTable.id
+        });
 
     return deletedUrl;
-}
+};

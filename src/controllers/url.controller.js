@@ -27,6 +27,10 @@ export const getUrlByShortCode = async (req,res,next)=>{
 
 export const deleteUrlById = async (req,res,next)=>{
     const id = req.params.id;
-    const deletedUrl = await UrlService.deleteUrlById(id);
+    const userId = req.user.userId;
+    if(!id){
+        return next(new ErrorHandler(400,"Id is required"));
+    }
+    const deletedUrl = await UrlService.deleteUrlById(id,userId);
     return res.status(200).json(new ApiResponse(204,deletedUrl,"URL deleted successfully"));;
 }
