@@ -16,7 +16,8 @@ export const getAllUrls= async(req,res,next)=>{
     const urls = await UrlService.getAllUrls(userId);
     return res.status(200).json(new ApiResponse(200,urls,"URLs fetched successfully") );
 }
-export const getUrlByShortCode = async (shortCode)=>{
+export const getUrlByShortCode = async ()=>{
+    const shortCode = req.params.shortcode;
     const url = await UrlService.getUrlByShortCode(shortCode);
     return res.status(200).json(new ApiResponse(200,url,"URL fetched successfully"));
 }
