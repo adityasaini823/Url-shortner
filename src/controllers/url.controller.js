@@ -1,12 +1,27 @@
 import {ApiResponse}from "../utils/api-response.js";
-import {shortenURL} from "../services/url.service.js";
+import * as UrlService from "../services/url.service.js";
 export const urlShorten = async (req,res,next)=>{
     const targetURL = req.body.url;
     const userId = req.user.userId;
     try{
-        const result = await shortenURL(targetURL,userId);
+        const result = await UrlService.shortenURL(targetURL,userId);
         return res.status(201).json(new ApiResponse(201,result,"URL shortened successfully"));
     }catch(err){
         next(err);
     }  
+}
+
+export const getAllUrls= async(req,res,next)=>{
+    const {userId}=req.user
+    const urls = await UrlService.getAllUrls(userId);
+    return res.status(200).json(new ApiResponse(200,urls,"URLs fetched successfully") );
+}
+export const getUrlByShortCode = async (shortCode)=>{
+    const url = await UrlService.getUrlByShortCode(shortCode);
+    return res.status(200).json(new ApiResponse(200,url,"URL fetched successfully"));
+}
+
+export const deleteUrlById = async (id)=>{
+    const deletedUrl = await UrlService.deleteUrlById(id);
+    return res.status(204).json(new ApiResponse(204,deletedUrl,"URL deleted successfully"));;
 }
